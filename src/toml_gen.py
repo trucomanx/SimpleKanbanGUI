@@ -42,7 +42,7 @@ classifiers = [
 ]
 license = "GPL-3.0-only WITH Classpath-Exception-2.0 OR BSD-3-Clause"
 license-files = ["LICENSE"]
-keywords = ["writing", "translate"]
+keywords = ["kanban", "productivity", "task", "to-do"]
 dependencies = [
     "PyQt5"
 ]
