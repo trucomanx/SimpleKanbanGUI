@@ -1,3 +1,5 @@
 /src/simple_kaban_gui/__pycache__/
 /src/simple_kanban_gui/__pycache__
 /src/simple_kanban_gui/modules/__pycache__/
+/src/dist/
+/src/simple_kanban_gui.egg-info/
