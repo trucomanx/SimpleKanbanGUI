@@ -1,0 +1,2 @@
+# SimpleKanbanGUI
+simple-kanban-gui
