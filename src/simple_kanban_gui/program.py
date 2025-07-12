@@ -35,6 +35,8 @@ DEFAULT_CONTENT={   "toolbar_add_column": "Add board",
                     "toolbar_about": "About",
                     "toolbar_about_tooltip": "About the program",
                     "window_filename": "Filename:",
+                    "window_path_problems": "Path problems!",
+                    "window_error_loading": "Error when loading:",
                     "board_startup_list": ["To do", "Doing", "Done"],
                     "board_style": {"frame":"background-color: #e0f5e0; border: 2px solid #66cc66; padding: 5px; border-radius: 5px;","title":"font-weight: bold; background-color: #ccffcc; color:#000000"},
                     "board_title": "New board",
@@ -333,12 +335,18 @@ class KanbanWindow(QMainWindow):
 
     def save_as_to_file(self):
         path, _ = QFileDialog.getSaveFileName(self, "Save as", "", "JSON (*.json)")
+        if not path.endswith(".json"):
+            path += ".json"
         self.top_input.setText(path)
         self.save_to_file()
         
     def save_to_file(self):
         path=self.top_input.text()
-        if path:
+        
+        if path=='':
+            self.save_as_to_file()
+            return
+        else:
             data = []
             for i in range(self.columns_layout.count() - 1):
                 item = self.columns_layout.itemAt(i).widget()
@@ -346,15 +354,17 @@ class KanbanWindow(QMainWindow):
                     data.append(item.get_data())
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
+            
+            self.top_line_widget.setVisible(True)
 
     def load_from_file(self):
         path, _ = QFileDialog.getOpenFileName(self, "Load", "", "JSON (*.json)")
-        if path:
+        if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 try:
                     data = json.load(f)
                 except Exception as e:
-                    QMessageBox.critical(self, "Error", f"Error when loading: {e}")
+                    QMessageBox.critical(self, "Error", f"{CONFIG['window_error_loading']}\n{e}")
                     return
             
             self.top_line_widget.setVisible(True)
@@ -369,7 +379,8 @@ class KanbanWindow(QMainWindow):
                 col = ColumnWidget()
                 col.set_data(col_data)
                 self.columns_layout.insertWidget(self.columns_layout.count() - 1, col)
-            
+        else:
+            QMessageBox.warning(self, CONFIG["window_path_problems"], f"{CONFIG['window_error_loading']}\n{path}")  
 
     def open_about(self):
         data={
@@ -380,6 +391,7 @@ class KanbanWindow(QMainWindow):
             "email": about.__email__,
             "description": about.__description__,
             "url_source": about.__url_source__,
+            "url_doc": about.__url_doc__,
             "url_funding": about.__url_funding__,
             "url_bugs": about.__url_bugs__
         }

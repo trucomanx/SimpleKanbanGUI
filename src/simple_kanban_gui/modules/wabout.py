@@ -76,6 +76,13 @@ class AboutWindow(QDialog):
         source_label.setAlignment(Qt.AlignLeft)
         layout.addWidget(source_label)
         
+        # Doc URL
+        doc_label = QLabel(f"Documentation: <a href=\"{data['url_doc']}\">{data['url_doc']}</a>")
+        doc_label.setTextInteractionFlags(Qt.TextSelectableByMouse| Qt.LinksAccessibleByMouse)
+        doc_label.setOpenExternalLinks(True)
+        doc_label.setAlignment(Qt.AlignLeft)
+        layout.addWidget(doc_label)
+        
         # Funding URL
         funding_label = QLabel(f"Funding: <a href=\"{data['url_funding']}\">{data['url_funding']}</a>")
         funding_label.setTextInteractionFlags(Qt.TextSelectableByMouse| Qt.LinksAccessibleByMouse)
