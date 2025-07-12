@@ -16,7 +16,7 @@ classifiers = [
 ]
 license = "GPL-3.0-only WITH Classpath-Exception-2.0 OR BSD-3-Clause"
 license-files = ["LICENSE"]
-keywords = ["writing", "translate"]
+keywords = ["kanban", "productivity", "task", "to-do"]
 dependencies = [
     "PyQt5"
 ]
@@ -24,6 +24,7 @@ dependencies = [
 [project.urls]
 "Bug Reports" = "https://github.com/trucomanx/SimpleKanbanGUI/issues"
 "Funding" = "https://trucomanx.github.io/en/funding.html"
+"Documentation" = "https://github.com/trucomanx/SimpleKanbanGUI/doc"
 "Source" = "https://github.com/trucomanx/SimpleKanbanGUI"
 
 [project.scripts]
