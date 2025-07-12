@@ -6,7 +6,7 @@ A simple kanban graphic user interface
 
 ## 1. Installing
 
-To install the package from `PyPI`, follow the instructions below:
+To install the package from [PyPI](https://pypi.org/project/simple-kanban-gui/), follow the instructions below:
 
 
 ```bash

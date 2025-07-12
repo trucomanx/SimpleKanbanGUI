@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simple_kanban_gui"
-version = "0.1.1"
+version = "0.1.3"
 description = "A simple kanban graphic user interface"
 readme = "README.md"
 authors = [{name = "Fernando Pujaico Rivera", email = "fernando.pujaico.rivera@gmail.com"}]
@@ -24,7 +24,7 @@ dependencies = [
 [project.urls]
 "Bug Reports" = "https://github.com/trucomanx/SimpleKanbanGUI/issues"
 "Funding" = "https://trucomanx.github.io/en/funding.html"
-"Documentation" = "https://github.com/trucomanx/SimpleKanbanGUI/doc"
+"Documentation" = "https://github.com/trucomanx/SimpleKanbanGUI/tree/main/doc"
 "Source" = "https://github.com/trucomanx/SimpleKanbanGUI"
 
 [project.scripts]

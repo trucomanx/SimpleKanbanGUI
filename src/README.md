@@ -2,11 +2,11 @@
 
 A simple kanban graphic user interface
 
-![logo](https://github.com/trucomanx/SimpleKanbanGUI/blob/main/screenshot.png)
+![logo](https://raw.githubusercontent.com/trucomanx/SimpleKanbanGUI/main/screenshot.png)
 
 ## 1. Installing
 
-To install the package from `PyPI`, follow the instructions below:
+To install the package from [PyPI](https://pypi.org/project/simple-kanban-gui/), follow the instructions below:
 
 
 ```bash
