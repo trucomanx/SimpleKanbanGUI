@@ -37,11 +37,14 @@ DEFAULT_CONTENT={   "toolbar_add_column": "Add board",
                     "window_filename": "Filename:",
                     "window_path_problems": "Path problems!",
                     "window_error_loading": "Error when loading:",
+                    "window_width": 1300,
+                    "window_height": 800,
                     "board_startup_list": ["To do", "Doing", "Done"],
                     "board_style": {"frame":"background-color: #e0f5e0; border: 2px solid #66cc66; padding: 5px; border-radius: 5px;","title":"font-weight: bold; background-color: #ccffcc; color:#000000"},
                     "board_title": "New board",
                     "board_new_note": "Add a new note",
                     "board_delete": "Remove board",
+                    "board_interchange_right": "Interchange board with the right",
                     "board_width": 300,
                     "note_style": {"frame":"background-color: #ffffff; border: 1px solid #cccccc; border-radius: 5px;"},
                     "note_title": "Initial title",
@@ -164,11 +167,17 @@ class ColumnWidget(QFrame):
         self.remove_btn.setIcon(QIcon.fromTheme("edit-delete"))
         self.remove_btn.setToolTip(CONFIG["board_delete"])
         self.remove_btn.clicked.connect(self.remove_self)
+        
+        self.interchange_right_btn = QPushButton()
+        self.interchange_right_btn.setIcon(QIcon.fromTheme("go-next"))
+        self.interchange_right_btn.setToolTip(CONFIG["board_interchange_right"])
+        self.interchange_right_btn.clicked.connect(self.interchange_right)
 
         top_layout = QHBoxLayout()
         top_layout.addWidget(self.title_edit)
         top_layout.addWidget(self.add_btn)
         top_layout.addWidget(self.remove_btn)
+        top_layout.addWidget(self.interchange_right_btn)
 
         self.notes_layout = QVBoxLayout()
         self.notes_layout.setSpacing(10)
@@ -177,6 +186,50 @@ class ColumnWidget(QFrame):
         self.layout.addLayout(top_layout)
         self.layout.addLayout(self.notes_layout)
 
+    def interchange_right(self):
+        # Encontrar o layout pai (KanbanWindow.columns_layout)
+        parent_layout = self.parentWidget().layout()
+        
+        # Obter a lista de widgets = []
+        widgets = []
+        for i in range(parent_layout.count()):
+            item = parent_layout.itemAt(i)
+            widget = item.widget()
+            if isinstance(widget, ColumnWidget):
+                widgets.append(widget)
+
+        if len(widgets) <= 1:
+            return
+
+        # Encontrar índice da coluna atual
+        try:
+            idx = widgets.index(self)
+        except ValueError:
+            return
+
+        # Cálculo cíclico do índice seguinte
+        next_idx = (idx + 1) % len(widgets)
+
+        # Trocar posições no layout
+        # Remover todos os widgets e itens, inclusive stretch
+        for i in reversed(range(parent_layout.count())):
+            item = parent_layout.itemAt(i)
+            widget = item.widget()
+            if widget:
+                parent_layout.removeWidget(widget)
+            else:
+                parent_layout.removeItem(item)  # remove o stretch
+
+        # Reordenar
+        widgets[idx], widgets[next_idx] = widgets[next_idx], widgets[idx]
+
+        # Re-inserir os widgets na nova ordem
+        for i, w in enumerate(widgets):
+            parent_layout.insertWidget(i, w)
+
+        # Certifique-se de manter o stretch sempre no fim
+        parent_layout.addStretch()
+        
     def on_title_enter(self):
         new_title = self.title_edit.text()
         self.title_edit.setCursorPosition(0)
@@ -241,7 +294,7 @@ class KanbanWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(about.__program_name__)
-        self.resize(1200, 600)
+        self.resize(CONFIG["window_width"], CONFIG["window_height"])
 
         ## Icon
         # Get base directory for icons
