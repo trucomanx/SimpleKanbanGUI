@@ -107,12 +107,12 @@ class ColumnWidget(QFrame):
         super().__init__()
         self.setAcceptDrops(True)
         self.setFrameShape(QFrame.StyledPanel)
-        self.setStyleSheet("background-color: #e0f5e0; border: 2px solid #66cc66; padding: 5px;")
+        self.setStyleSheet("background-color: #e0f5e0; border: 2px solid #66cc66; padding: 5px; border-radius: 5px;")
 
         self.layout = QVBoxLayout(self)
 
         self.title_edit = QLineEdit(title)
-        self.title_edit.setStyleSheet("font-weight: bold; background-color: #ccffcc;")
+        self.title_edit.setStyleSheet("font-weight: bold; background-color: #ccffcc; color:#000000")
 
         self.add_btn = QPushButton()
         self.add_btn.setIcon(QIcon.fromTheme("list-add"))
