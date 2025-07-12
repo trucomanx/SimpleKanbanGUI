@@ -2,7 +2,7 @@
 
 A simple kanban graphic user interface
 
-![logo](../screenshot.png)
+![logo](https://github.com/trucomanx/SimpleKanbanGUI/blob/main/screenshot.png)
 
 ## 1. Installing
 
