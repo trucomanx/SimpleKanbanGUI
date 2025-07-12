@@ -1,6 +1,6 @@
 # about.py
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __package__ = "simple_kanban_gui"
 __program_name__ = "simple-kanban-gui"
 __author__ = "Fernando Pujaico Rivera" 
