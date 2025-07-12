@@ -24,7 +24,7 @@ simple-kanban-gui
 ```
 ## 2. More information
 
-If you want more information [doc](https://github.com/trucomanx/SimpleKanbanGUI/blob/main/doc)
+If you want more information go to [doc](https://github.com/trucomanx/SimpleKanbanGUI/blob/main/doc) directory.
 
 ## 3. Buy me a coffee
 
