@@ -347,11 +347,12 @@ class KanbanWindow(QMainWindow):
             self.save_as_to_file()
             return
         else:
-            data = []
+            boards = []
             for i in range(self.columns_layout.count() - 1):
                 item = self.columns_layout.itemAt(i).widget()
                 if isinstance(item, ColumnWidget):
-                    data.append(item.get_data())
+                    boards.append(item.get_data())
+            data={"boards":boards}
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             
@@ -375,7 +376,7 @@ class KanbanWindow(QMainWindow):
                 if item:
                     item.setParent(None)
 
-            for col_data in data:
+            for col_data in data["boards"]:
                 col = ColumnWidget()
                 col.set_data(col_data)
                 self.columns_layout.insertWidget(self.columns_layout.count() - 1, col)
