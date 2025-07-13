@@ -79,7 +79,7 @@ class NoteWidget(QWidget):
         self.content_edit.setVisible(False)
 
         self.toggle_btn = QPushButton()
-        self.toggle_btn.setIcon(QIcon.fromTheme("go-down"))
+        self.toggle_btn.setIcon(QIcon.fromTheme("insert-text"))
         self.toggle_btn.setToolTip(CONFIG["note_expand_compress"])
         self.toggle_btn.clicked.connect(self.toggle_content)
 
