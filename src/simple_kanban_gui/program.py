@@ -276,15 +276,29 @@ class ColumnWidget(QFrame):
         note_json = stream.readQString()
         note_data = json.loads(note_json)
 
-        # Cria nova nota aqui
-        self.add_note(note_data['title'], note_data['content'])
+        dragged_note = QApplication.instance().dragged_note
 
         # Remove a nota original do local de origem
-        dragged_note = QApplication.instance().dragged_note
         if dragged_note:
             dragged_note.setParent(None)
             dragged_note.deleteLater()
             QApplication.instance().dragged_note = None  # Limpa referência
+
+        # Calcula a posição ideal para inserção
+        pos = event.pos()
+        insert_at = self.notes_layout.count() - 1  # default = before stretch
+
+        for i in range(self.notes_layout.count() - 1):  # -1 ignora o stretch
+            item = self.notes_layout.itemAt(i)
+            widget = item.widget()
+            if widget and isinstance(widget, NoteWidget):
+                widget_pos = widget.mapTo(self, widget.rect().center())
+                if pos.y() < widget_pos.y():
+                    insert_at = i
+                    break
+
+        new_note = NoteWidget(note_data['title'], note_data['content'])
+        self.notes_layout.insertWidget(insert_at, new_note)
 
         event.acceptProposedAction()
 
