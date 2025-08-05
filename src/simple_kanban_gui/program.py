@@ -401,9 +401,9 @@ class KanbanWindow(QMainWindow):
         self.columns_layout.insertWidget(self.columns_layout.count() - 1, column)
 
     def save_as_to_file(self):
-        path, _ = QFileDialog.getSaveFileName(self, "Save as", "", "JSON (*.json)")
-        if not path.endswith(".json"):
-            path += ".json"
+        path, _ = QFileDialog.getSaveFileName(self, "Save as", "", "JSON (*.kanban.json)")
+        if not path.endswith(".kanban.json"):
+            path += ".kanban.json"
         self.top_input.setText(path)
         self.save_to_file()
         
@@ -426,7 +426,7 @@ class KanbanWindow(QMainWindow):
             self.top_line_widget.setVisible(True)
 
     def load_from_file(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Load", "", "JSON (*.json)")
+        path, _ = QFileDialog.getOpenFileName(self, "Load", "", "JSON (*.kanban.json)")
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 try:
