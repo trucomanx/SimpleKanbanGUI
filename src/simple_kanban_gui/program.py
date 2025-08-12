@@ -11,7 +11,9 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QMimeData, QByteArray, QDataStream, QIODevice
+from PyQt5.QtGui import QFontMetrics
 from PyQt5 import QtGui
+
 
 
 import simple_kanban_gui.about as about
@@ -364,7 +366,7 @@ class KanbanWindow(QMainWindow):
 
         self.columns_widget = QWidget()
         self.columns_layout = QHBoxLayout(self.columns_widget)
-        self.columns_layout.setSpacing(15)
+        self.columns_layout.setSpacing(10)
         self.columns_layout.addStretch()
 
         self.scroll_area.setWidget(self.columns_widget)
@@ -380,8 +382,22 @@ class KanbanWindow(QMainWindow):
         self.top_line_layout.addWidget(self.top_label)
         self.top_line_layout.addWidget(self.top_input)
 
+        # Title layout
+        self.top_title_line_widget = QWidget()
+        #self.top_title_line_widget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        self.top_title_layout = QHBoxLayout(self.top_title_line_widget)
+        self.top_title_label = QLabel(CONFIG["kanban_title_label"])
+        self.top_title_input = QLineEdit(CONFIG["kanban_title_default"])
+        self.top_description_label = QLabel(CONFIG["kanban_description_label"])
+        self.top_description_input = QLineEdit(CONFIG["kanban_description_default"])
+        self.top_title_layout.addWidget(self.top_title_label)
+        self.top_title_layout.addWidget(self.top_title_input)
+        self.top_title_layout.addWidget(self.top_description_label)
+        self.top_title_layout.addWidget(self.top_description_input)
+
         # Adiciona ao layout principal
         main_layout.addWidget(self.top_line_widget)
+        main_layout.addWidget(self.top_title_line_widget)
         main_layout.addWidget(self.scroll_area)
 
         # Quadros iniciais
@@ -419,7 +435,10 @@ class KanbanWindow(QMainWindow):
                 item = self.columns_layout.itemAt(i).widget()
                 if isinstance(item, ColumnWidget):
                     boards.append(item.get_data())
-            data={"boards":boards}
+                    
+            data={  "title":self.top_title_input.text(),
+                    "description":self.top_description_input.text(),
+                    "boards":boards}
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             
@@ -437,6 +456,9 @@ class KanbanWindow(QMainWindow):
             
             self.top_line_widget.setVisible(True)
             self.top_input.setText(path)
+            
+            self.top_title_input.setText(data["title"])
+            self.top_description_input.setText(data["description"])
 
             for i in reversed(range(self.columns_layout.count() - 1)):
                 item = self.columns_layout.itemAt(i).widget()
