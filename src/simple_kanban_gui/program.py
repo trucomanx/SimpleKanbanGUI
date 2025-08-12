@@ -24,7 +24,9 @@ from simple_kanban_gui.modules.wabout  import show_about_window
 # Path to config file
 CONFIG_PATH = os.path.join(os.path.expanduser("~"),".config",about.__package__,"config.json")
 
-DEFAULT_CONTENT={   "toolbar_add_column": "Add board",
+DEFAULT_CONTENT={   "toolbar_new_kanban": "New kanban",
+                    "toolbar_new_kanban_tooltip": "New kanban window",
+                    "toolbar_add_column": "Add board",
                     "toolbar_add_column_tooltip": "Add new frame",
                     "toolbar_save": "Save",
                     "toolbar_save_tooltip": "Save data to JSON file",
@@ -39,15 +41,19 @@ DEFAULT_CONTENT={   "toolbar_add_column": "Add board",
                     "window_filename": "Filename:",
                     "window_path_problems": "Path problems!",
                     "window_error_loading": "Error when loading:",
-                    "window_width": 1300,
+                    "window_width": 1500,
                     "window_height": 800,
+                    "kanban_title_label":"Title",
+                    "kanban_title_default":"My title",
+                    "kanban_description_label":"Description",
+                    "kanban_description_default":"",
                     "board_startup_list": ["To do", "Doing", "Done"],
                     "board_style": {"frame":"background-color: #e0f5e0; border: 2px solid #66cc66; padding: 5px; border-radius: 5px;","title":"font-weight: bold; background-color: #ccffcc; color:#000000"},
                     "board_title": "New board",
                     "board_new_note": "Add a new note",
                     "board_delete": "Remove board",
                     "board_interchange_right": "Interchange board with the right",
-                    "board_width": 300,
+                    "board_width": 350,
                     "note_style": {"frame":"background-color: #ffffff; border: 1px solid #cccccc; border-radius: 5px;"},
                     "note_title": "Initial title",
                     "note_content": "Hi",
@@ -307,7 +313,7 @@ class ColumnWidget(QFrame):
 
 
 class KanbanWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, filepath):
         super().__init__()
         self.setWindowTitle(about.__program_name__)
         self.resize(CONFIG["window_width"], CONFIG["window_height"])
@@ -321,6 +327,10 @@ class KanbanWindow(QMainWindow):
         self.toolbar = QToolBar()
         self.toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         self.addToolBar(self.toolbar)
+
+        self.new_kanban_action = QAction(QIcon.fromTheme("document-new"), CONFIG["toolbar_new_kanban"], self)
+        self.new_kanban_action.setToolTip(CONFIG["toolbar_new_kanban_tooltip"])
+        self.new_kanban_action.triggered.connect(lambda: self.func_new_kanban())
 
         self.add_column_action = QAction(QIcon.fromTheme("list-add"), CONFIG["toolbar_add_column"], self)
         self.add_column_action.setToolTip(CONFIG["toolbar_add_column_tooltip"])
@@ -336,7 +346,7 @@ class KanbanWindow(QMainWindow):
 
         self.load_action = QAction(QIcon.fromTheme("document-open"), CONFIG["toolbar_load"], self)
         self.load_action.setToolTip(CONFIG["toolbar_load_tooltip"])
-        self.load_action.triggered.connect(self.load_from_file)
+        self.load_action.triggered.connect(lambda: self.load_from_file(""))
 
         # Adicionar o espaçador
         spacer = QWidget()
@@ -350,6 +360,7 @@ class KanbanWindow(QMainWindow):
         self.about_action.setToolTip(CONFIG["toolbar_about_tooltip"])
         self.about_action.triggered.connect(self.open_about)
 
+        self.toolbar.addAction(self.new_kanban_action)
         self.toolbar.addAction(self.add_column_action)
         self.toolbar.addAction(self.save_action)
         self.toolbar.addAction(self.save_as_action)
@@ -405,6 +416,12 @@ class KanbanWindow(QMainWindow):
             self.add_column(title)
             
         self.top_line_widget.setVisible(False)
+        
+        if len(filepath)>0:
+            self.load_from_file(filepath)
+
+    def func_new_kanban(self):
+        subprocess.Popen([sys.executable, __file__])
 
     def open_configure_editor(self):
         if os.name == 'nt':  # Windows
@@ -444,8 +461,11 @@ class KanbanWindow(QMainWindow):
             
             self.top_line_widget.setVisible(True)
 
-    def load_from_file(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Load", "", "JSON (*.kanban.json)")
+    def load_from_file(self, path=""):
+        
+        if (len(path)==0) or not os.path.exists(path):
+            path, _ = QFileDialog.getOpenFileName(self, "Load", "", "JSON (*.kanban.json)")
+            
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 try:
@@ -494,22 +514,27 @@ def main():
     create_desktop_menu()
     create_desktop_file('~/.local/share/applications')
     
-    for n in range(len(sys.argv)):
-        if sys.argv[n] == "--autostart":
-            create_desktop_directory(overwrite = True)
-            create_desktop_menu(overwrite = True)
-            create_desktop_file('~/.config/autostart', overwrite=True)
-            return
-        if sys.argv[n] == "--applications":
-            create_desktop_directory(overwrite = True)
-            create_desktop_menu(overwrite = True)
-            create_desktop_file('~/.local/share/applications', overwrite=True)
-            return
+    filepath = ""
+    if(len(sys.argv)==2):
+        if os.path.exists(sys.argv[1]):
+            filepath = sys.argv[1]
+    else:
+        for n in range(len(sys.argv)):
+            if sys.argv[n] == "--autostart":
+                create_desktop_directory(overwrite = True)
+                create_desktop_menu(overwrite = True)
+                create_desktop_file('~/.config/autostart', overwrite=True)
+                return
+            if sys.argv[n] == "--applications":
+                create_desktop_directory(overwrite = True)
+                create_desktop_menu(overwrite = True)
+                create_desktop_file('~/.local/share/applications', overwrite=True)
+                return
 
     app = QApplication(sys.argv)
     app.setApplicationName(about.__package__) 
     
-    window = KanbanWindow()
+    window = KanbanWindow(filepath)
     window.show()
     sys.exit(app.exec_())
     
