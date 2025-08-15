@@ -516,6 +516,18 @@ def main():
     
     filepath = ""
     if(len(sys.argv)==2):
+        if sys.argv[1] == "--autostart":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
+            create_desktop_file('~/.config/autostart', overwrite=True)
+            return
+            
+        if sys.argv[1] == "--applications":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
+            create_desktop_file('~/.local/share/applications', overwrite=True)
+            return
+
         if os.path.exists(sys.argv[1]):
             filepath = sys.argv[1]
     else:
