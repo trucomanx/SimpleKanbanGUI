@@ -10,8 +10,8 @@ from PyQt5.QtWidgets import (
     QMainWindow, QAction, QMessageBox, QSizePolicy, QFrame
 )
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QMimeData, QByteArray, QDataStream, QIODevice
-from PyQt5.QtGui import QFontMetrics
+from PyQt5.QtCore import Qt, QMimeData, QByteArray, QDataStream, QIODevice, QUrl
+from PyQt5.QtGui import QFontMetrics, QDesktopServices
 from PyQt5 import QtGui
 
 
@@ -38,6 +38,8 @@ DEFAULT_CONTENT={   "toolbar_new_kanban": "New kanban",
                     "toolbar_configure_tooltip": "Open the configure Json file",
                     "toolbar_about": "About",
                     "toolbar_about_tooltip": "About the program",
+                    "toolbar_coffee": "Coffee",
+                    "toolbar_coffee_tooltip": "Buy me a coffee (TrucomanX)",
                     "window_filename": "Filename:",
                     "window_path_problems": "Path problems!",
                     "window_error_loading": "Error when loading:",
@@ -352,13 +354,21 @@ class KanbanWindow(QMainWindow):
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
+        #
         self.configure_action = QAction(QIcon.fromTheme("document-properties"), CONFIG["toolbar_configure"], self)
         self.configure_action.setToolTip(CONFIG["toolbar_configure_tooltip"])
         self.configure_action.triggered.connect(self.open_configure_editor)
         
+        #
         self.about_action = QAction(QIcon.fromTheme("help-about"), CONFIG["toolbar_about"], self)
         self.about_action.setToolTip(CONFIG["toolbar_about_tooltip"])
         self.about_action.triggered.connect(self.open_about)
+        
+        # Coffee
+        self.coffee_action = QAction(QIcon.fromTheme("emblem-favorite"), CONFIG["toolbar_coffee"], self)
+        self.coffee_action.setToolTip(CONFIG["toolbar_coffee_tooltip"])
+        self.coffee_action.triggered.connect(self.on_coffee_action_click)
+
 
         self.toolbar.addAction(self.new_kanban_action)
         self.toolbar.addAction(self.add_column_action)
@@ -368,7 +378,8 @@ class KanbanWindow(QMainWindow):
         self.toolbar.addWidget(spacer)
         self.toolbar.addAction(self.configure_action)
         self.toolbar.addAction(self.about_action)
-
+        self.toolbar.addAction(self.coffee_action)
+        
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
@@ -420,6 +431,9 @@ class KanbanWindow(QMainWindow):
         if len(filepath)>0:
             self.load_from_file(filepath)
 
+    def on_coffee_action_click(self):
+        QDesktopServices.openUrl(QUrl("https://ko-fi.com/trucomanx"))
+        
     def func_new_kanban(self):
         subprocess.Popen([sys.executable, __file__])
 
