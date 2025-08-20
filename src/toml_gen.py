@@ -56,6 +56,7 @@ dependencies = [
 
 [project.scripts]
 "{__program_name__}" = "{__package__}.program:main"
+"{__manager_name__}" = "{__package__}.manager:main"
 
 [tool.setuptools]
 packages = ["{__package__}", "{__package__}.modules"]

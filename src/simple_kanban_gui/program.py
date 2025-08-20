@@ -466,9 +466,12 @@ class KanbanWindow(QMainWindow):
                 item = self.columns_layout.itemAt(i).widget()
                 if isinstance(item, ColumnWidget):
                     boards.append(item.get_data())
-                    
-            data={  "title":self.top_title_input.text(),
-                    "description":self.top_description_input.text(),
+            
+            title = self.top_title_input.text()
+            description = self.top_description_input.text()
+            
+            data={  "title":title,
+                    "description": description,
                     "boards":boards}
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)

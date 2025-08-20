@@ -16,14 +16,19 @@ def update_desktop_database(desktop_path):
     except FileNotFoundError:
         print("The command 'update-desktop-database' was not found. Verify that the package 'desktop-file-utils' is installed.")
 
-def create_desktop_file(desktop_path, overwrite=False):
+def create_desktop_file(desktop_path, overwrite=False, program_name=None):
     base_dir_path = os.path.dirname(os.path.abspath(__file__))
     icon_path = os.path.join(base_dir_path, 'icons', 'logo.png')
 
-    script_path = os.path.expanduser(f"~/.local/bin/{about.__program_name__}")
+    if program_name is None:
+        __program_name = about.__program_name__
+    else:
+        __program_name = program_name
+
+    script_path = os.path.expanduser(f"~/.local/bin/{__program_name}")
 
     desktop_entry = f"""[Desktop Entry]
-Name={about.__program_name__}
+Name={__program_name}
 Comment={about.__description__}
 Exec={script_path}
 Terminal=false
@@ -35,14 +40,14 @@ Keywords=organizer;python;
 Encoding=UTF-8
 StartupWMClass={about.__package__}
 """
-    path = os.path.expanduser(os.path.join(desktop_path,f"{about.__program_name__}.desktop"))
+    path = os.path.expanduser(os.path.join(desktop_path,f"{__program_name}.desktop"))
     
     if not os.path.exists(path) or overwrite == True: 
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(desktop_entry)
         os.chmod(path, 0o755)
-        print(f"File {about.__program_name__}.desktop created in {path}.")
+        print(f"File {__program_name}.desktop created in {path}.")
         update_desktop_database(desktop_path)
     
 def create_desktop_directory(   directory_name = "ResearchTools",
