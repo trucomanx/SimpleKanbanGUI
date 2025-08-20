@@ -11,6 +11,7 @@ from simple_kanban_gui.about import (
     __version__,
     __package__,
     __program_name__,
+    __manager_name__,
     __author__,
     __email__,
     __description__,

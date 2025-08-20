@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simple_kanban_gui"
-version = "0.1.7"
+version = "0.1.8"
 description = "A simple kanban graphic user interface"
 readme = "README.md"
 authors = [{name = "Fernando Pujaico Rivera", email = "fernando.pujaico.rivera@gmail.com"}]
@@ -29,6 +29,7 @@ dependencies = [
 
 [project.scripts]
 "simple-kanban-gui" = "simple_kanban_gui.program:main"
+"simple-kanban-manager" = "simple_kanban_gui.manager:main"
 
 [tool.setuptools]
 packages = ["simple_kanban_gui", "simple_kanban_gui.modules"]
