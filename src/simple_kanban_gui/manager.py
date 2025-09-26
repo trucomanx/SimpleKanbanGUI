@@ -763,20 +763,25 @@ def main():
     
     create_desktop_directory()    
     create_desktop_menu()
-    create_desktop_file('~/.local/share/applications', program_name=about.__manager_name__)
+    create_desktop_file(os.path.join("~",".local","share","applications"), 
+                        program_name=about.__manager_name__)
     
     filepath = os.getcwd()
     if(len(sys.argv)==2):
         if sys.argv[1] == "--autostart":
             create_desktop_directory(overwrite = True)
             create_desktop_menu(overwrite = True)
-            create_desktop_file('~/.config/autostart', overwrite=True, program_name=about.__manager_name__)
+            create_desktop_file(os.path.join("~",".config","autostart"), 
+                                overwrite=True, 
+                                program_name=about.__manager_name__)
             return
             
         if sys.argv[1] == "--applications":
             create_desktop_directory(overwrite = True)
             create_desktop_menu(overwrite = True)
-            create_desktop_file('~/.local/share/applications', overwrite=True, program_name=about.__manager_name__)
+            create_desktop_file(os.path.join("~",".local","share","applications"), 
+                                overwrite=True, 
+                                program_name=about.__manager_name__)
             return
         
         if sys.argv[1] == "--last-path":
@@ -789,12 +794,12 @@ def main():
             if sys.argv[n] == "--autostart":
                 create_desktop_directory(overwrite = True,program_name=about.__manager_name__)
                 create_desktop_menu(overwrite = True)
-                create_desktop_file('~/.config/autostart', overwrite=True)
+                create_desktop_file(os.path.join("~",".config","autostart"), overwrite=True)
                 return
             if sys.argv[n] == "--applications":
                 create_desktop_directory(overwrite = True,program_name=about.__manager_name__)
                 create_desktop_menu(overwrite = True)
-                create_desktop_file('~/.local/share/applications', overwrite=True)
+                create_desktop_file(os.path.join("~",".local","share","applications"), overwrite=True)
                 return
 
             if sys.argv[n] == "--last-path":
@@ -802,7 +807,7 @@ def main():
     
     app = QApplication(sys.argv)
     app.setStyleSheet(CONFIG["context_menu_style"])
-    #app.setApplicationName(about.__package__) 
+    app.setApplicationName(about.__manager_name__) 
     
     # Aparência sutil
     #app.setStyle("Imagine") # "Fusion"
